@@ -1,0 +1,116 @@
+<?php
+$zoekinfoEvenementen = $this->session->userdata('zoekinfoEvenementen');
+?>
+<script type="text/javascript">
+
+    $(function() {
+        $(".datum").datepicker({dateFormat: 'dd/mm/yy'});
+        $(".buttons").button();
+        $("#zoeken").click(function(e) {
+            e.preventDefault();
+            zoekevenementen($("#naam").val(), $("#plaats").val(), $("#begindatum").val(), $("#einddatum").val(), $("#omschrijving").val(), $("#pagination").val());
+        });
+        $("#aanmaken").click(function() {
+            // hier waarde voor dialog aanmaken nieuw evenement
+        });
+    $("#geavanceerdZoeken").click(function() {
+            geavanceerdZoeken();
+        });
+    });
+
+    $(function() {
+        if (<?php echo $zoekinfoEvenementen['geavanceerdZoeken'];?> == 1) {
+            geavanceerdZoeken();
+        }
+    });
+
+    function zoekevenementen(naam, plaats, begindatum, einddatum, omschrijving, pagination) {
+        $.ajax({type: "GET",
+            url: site_url + "/user/evenementenZoekactie",
+            data: {naam: naam,
+                plaats: plaats,
+                begindatum: begindatum,
+                einddatum: einddatum,
+                omschrijving: omschrijving,
+                pagination: pagination
+            },
+            success: function(result) {
+                $("#resultaat").html(result);
+            }
+        });
+    }
+
+    function geavanceerdZoeken() {
+        $.ajax({
+            url: site_url + "/user/evenementenGeavanceerdZoeken",
+            success: function(result) {
+                $("#fieldsetZoeken").html(result);
+            }
+        });
+    }
+
+    //    $(function() {
+    //        $( "#naam" ).autocomplete({
+    //            source: site_url + "/bestelling/json",
+    //            minLength: 1,
+    //            select: function( event, ui ) {
+    //                var gekozenbestelling = ui.item.id;
+    //                $( this ).val(ui.item.value);
+    //                zoekbestelling( gekozenbestelling );
+    //            }
+    //        });
+    //
+    //    });
+
+</script>
+
+<?php
+$fieldsetZoeken = array(
+    'name' => 'fieldsetZoeken',
+    'id' => 'fieldsetZoeken',
+);
+
+$naam = array(
+    'name' => 'naam',
+    'id' => 'naam',
+    'value' => $zoekinfoEvenementen['naam'],
+);
+
+$submit = array(
+    'id' => 'zoeken',
+    'name' => 'zoeken',
+    'class' => 'buttons',
+);
+
+$aanmaken = array(
+    'id' => 'aanmaken',
+    'name' => 'aanmaken',
+    'class' => 'buttons',
+);
+
+$geavanceerdZoeken = array(
+    'id' => 'geavanceerdZoeken',
+    'name' => 'geavanceerdZoeken',
+    'class' => 'buttons',
+);
+?>
+<h1>Evenementen</h1>
+<?php echo form_fieldset(NULL, $fieldsetZoeken);?>
+<?php echo form_open(); ?>
+<table>
+    <tr>
+        <td><?php echo form_label('Naam', $naam['id']); ?></td>
+        <td><?php echo form_input($naam); ?></td>
+        <td><?php echo form_button($geavanceerdZoeken, 'Meer zoekopties'); ?></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><?php echo form_submit($submit, 'Zoeken'); ?></td>
+        <td><?php if($recht == 3){echo form_button($aanmaken, 'Evenement aanmaken');} ?></td>
+        <td><?php echo form_hidden('geavanceerd', '0');?></td>
+    </tr>
+</table>
+<?php echo form_close(); ?>
+<?php echo form_fieldset_close(); ?>
+<div id="resultaat"><?php include("evenementenzoeken_ajax.php"); ?></div>
+<?php echo '<a class = "buttons" href = "javascript:history.go(-1)">Terug</a>'; ?>

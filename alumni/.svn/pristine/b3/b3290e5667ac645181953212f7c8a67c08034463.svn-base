@@ -1,0 +1,537 @@
+/* 
++----------------------------------------------------------
+| Beershop
++----------------------------------------------------------
+| KHK - 2 TI - 201x-201x
++----------------------------------------------------------
+| style.css
+|
++----------------------------------------------------------
+| Team 28
++----------------------------------------------------------
+*/
+
+body {
+    min-width: 1020px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    background: #1B2024;
+    font-family: 'Abel', sans-serif;
+    font-size: 15px;
+    color: #8f8f8f;
+}
+
+/*#dropdown {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 2px 30px 2px 2px;
+    border: none;
+    background: transparent url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") no-repeat right center;
+}*/
+
+.buttons{
+    font-size: 12px;
+}
+
+.edit{
+    width: 32px;
+    height: 32px;
+    background-image: url(images/edit.png) !important;
+}
+
+.delete {
+    width: 32px;
+    height: 32px;
+    background-image: url(images/delete.png) !important;
+}
+
+#dialog-delete, #dialog-delete-fout{
+    font-size: 75%;
+}
+
+.datum {
+    width: 75px;
+}
+
+h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 10px;
+    font-family: 'Abel', sans-serif;
+    font-weight: 200;
+    color: #222222;
+}
+
+ol, ul {
+    margin: 5px;
+    padding: 20px;
+}
+
+p, ol {
+    line-height: 180%;
+}
+
+p {
+    padding: 20px 0px;
+    margin: 5px;
+}
+
+a {
+    color: #5C5539;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a img {
+    border: none;
+}
+
+img.alignleft {
+    float: left;
+}
+
+img.alignright {
+    float: right;
+}
+
+img.aligncenter {
+    margin: 0px auto;
+}
+
+/** WRAPPER */
+
+#wrapper {
+}
+
+.container {
+    width: 1000px;
+    margin: 0px auto;
+}
+
+.clearfix {
+    clear: both;
+}
+
+/* Header */
+
+#header-wrapper {
+    overflow: hidden;
+    height: 157px;
+    background: #DEE3E5;
+    background-image:url(images/page-header.png);
+}
+
+#header {
+    width: 1200px;
+    height: 140px;
+    margin: 0 auto;
+    padding: 0px 0px;
+    z-index: 2;
+
+}
+
+#loginwrapper {
+    position: relative;
+    color: #10202F;
+    float: right;
+    font-size: 14px;
+    z-index: 2;
+    /*margin-top: 10px;*/
+}
+
+text, password {
+    position: relative;
+    color: #10202F;
+    font-size: 12px;
+    width: 160px;
+}
+
+.buttons {
+    width: auto;
+}
+
+#wachtwoordvergeten{
+    font-size: 8px;
+    margin-top: -20px;
+}
+
+/* Logo */
+
+#logo {
+    float: left;
+    width: 300px;
+    height: 80px;
+    margin: 0px;
+    margin-top: 15px;
+    padding: 0px;
+}
+#logo img {
+    width: 200px;
+}
+
+#logo h1 {
+    padding: 40px 0px 0px 0px;
+    background: /*url(images/logo.png)*/ no-repeat left 50%;
+    text-transform: lowercase;
+    letter-spacing: -2px;
+    font-size: 3.6em;
+}
+
+#logo h1 a {
+    text-decoration: none;
+    color: #1B2024;
+}
+
+/* Menu */
+
+#menu {
+    position: static;
+    float: right;
+    width: 650px;
+    height: 80px;
+    margin-top: -80px;
+    margin-left: 555px;
+    z-index: 1;
+}
+
+#menu ul {
+    float: right;
+    padding: 40px 0px 0px 0px;
+    list-style: none;
+    line-height: normal;
+}
+
+#menu li {
+    float: left;
+}
+
+#menu a {
+    display: block;
+    margin-left: 1px;
+    padding: 5px 20px 5px 20px;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: #10202F;
+}
+
+/*#menu a:hover, #menu .current_page_item a {
+    text-decoration: none;
+    background: #53cfec;
+    background: #00a1b1;
+    border-radius: 5px;
+    color: #FFFFFF;
+}*/
+
+#menu a:link{
+    text-decoration: none;
+    /*background: #53cfec;*/
+    background: #00a1b1;
+    border-radius: 5px;
+    color: #FFFFFF;
+}
+
+/* Page */
+
+#page-wrapper {
+    overflow: hidden;
+    /*background: #F1F2E9;*/
+    background: #fff;
+    min-height: 500px;
+}
+
+#page {
+    overflow: hidden;
+    width: auto;
+    margin: 0px 160px;
+    padding: 25px 0px;
+    color: #8F8F8F;
+}
+
+table.fancy {
+    margin: 10px 0px;
+    border-collapse: collapse;
+}
+
+table.fancy tr:hover {
+    border: 1px solid #fbcb09;
+    background: #fdf5ce url(images/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x;
+    color: #c77405;
+}
+
+table.fancy th, table.fancy td {
+    border: 1px silver solid;
+    padding: 0.2em;
+    padding: 3px 6px;
+}
+
+table.fancy th {
+    background: gainsboro;
+    text-align: left;
+}
+
+table.fancy caption {
+    margin-left: inherit;
+    margin-right: inherit;
+}
+
+/** CONTENT */
+
+#content {
+    float: left;
+    width: 850px;
+    padding: 0px 0px 0px 0px;
+    color: #555555;
+    padding-left: 50px;
+}
+
+#content h2 {
+    padding: 0px 0px 30px 0px;
+    letter-spacing: -1px;
+    font-size: 36px;
+    color: #222222;
+}
+
+#content .subtitle {
+    padding: 0px 0px 30px 0px;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    color: #81AFC5;
+}
+
+/** SIDEBAR */
+
+#sidebar {
+    
+    width: 290px;
+    padding: 0px 0px 20px 0px;
+}
+
+#sidebar table{
+    border: #10202F 1px solid;
+}
+
+#sidebar table a {
+    text-decoration:none;
+
+}
+
+#sidebar h2 {
+    padding: 0px 0px 30px 0px;
+    letter-spacing: -1px;
+    font-size: 2em;
+}
+
+/* Footer */
+
+#footer {
+    background: #1B2024;
+    margin: 15px auto;
+    font-family: 'Verdana', sans-serif;
+    color: #FFFFFF;
+    height: 25px;
+}
+
+#footer p {
+    padding: 0px;
+    margin: 0;
+    letter-spacing: 1px;
+    line-height: normal;
+    font-size: 10px;
+    text-align: center;
+    color: #4D565E;
+}
+
+#footer a {
+    color: #4D565E;
+}
+
+/* Three Column Top Content */
+
+/*#sidebar {
+    background: #F1F2E9;
+    float: left;
+    margin-left: -25px;
+}
+
+#sidebar table {
+    border: 1px solid black;
+    margin-left: 25px;
+
+}
+#sidebar table a {
+    text-decoration:none;
+
+}*/
+
+
+#top-content {
+    overflow: hidden;
+    width: 1000px;
+    margin: 0px auto;
+    padding: 50px 0px 50px 0px;
+    color: #717171;
+}
+
+#top-content a {
+}
+
+#top-content h2 {
+    margin: 0px;
+    padding: 0px 0px 30px 0px;
+    letter-spacing: -1px;
+    font-size: 30px;
+    color: #B5A871;
+}
+
+#top-content h2 span {
+    color: #5C5539;
+}
+
+
+#top-content #fbox1 {
+    float: left;
+    width: 320px;
+    margin-right: 20px;
+}
+
+#top-content #fbox2 {
+    float: right;
+    width: 640px;
+}
+
+/* Banner Style */
+
+#banner-wrapper {
+    overflow: hidden;
+    height: 345px;
+    padding: 40px 0px;
+    background: url(images/img03.png) repeat;
+}
+
+#banner {
+    overflow: hidden;
+    width: 1000px;
+    margin: 0px auto;
+}
+
+/* Button Style */
+
+.button-style {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 7px 30px;
+    background: #53cfec;
+    border-radius: 5px;
+}
+
+.button-style a {
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+
+/* List Style 1 */
+
+ul.style1 {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+ul.style1 li {
+    padding: 20px 0px 20px 0px;
+    border-top: 1px dashed #E6E7DC;
+}
+
+ul.style1 a {
+    text-decoration: none;
+    color: #6B6B6B;
+}
+
+ul.style1 a:hover {
+    text-decoration: underline;
+    color: #6B6B6B;
+}
+
+ul.style1 .first {
+    padding-top: 0px;
+    border-top: none;
+}
+
+/* List Style 2 */
+
+ul.style2 {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+ul.style2 li {
+    padding: 9px 0px 9px 0px;
+    border-top: 1px dashed #E6E7DC;
+}
+
+ul.style2 .first {
+    padding-top: 0px;
+    border-top: none;
+}
+
+/* List style 3 */
+
+ul.style3 {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+ul.style3 li {
+    padding: 20px 0px 20px 0px;
+    background: url(images/link-style1-divider.png) repeat-x left top;
+}
+
+ul.style3 p {
+    margin: 0px;
+    padding: 0px;
+}
+
+ul.style3 img {
+    float: left;
+    margin-top: 3px;
+    margin-right: 20px;
+}
+
+ul.style3 .posted {
+    padding: 10px 0px 0px 0px;
+    font-size: 8pt;
+    color: #A2A2A2;
+}
+
+ul.style3 .first {
+    padding-top: 0px;
+    background: none;
+}
+
+div.ui-datepicker {
+    font-size: 70%;
+}
+
+fieldset {
+    padding: 10px 0px;
+}
+
+.clear {
+    clear: both;
+}

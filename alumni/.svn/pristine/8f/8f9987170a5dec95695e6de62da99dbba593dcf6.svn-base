@@ -1,0 +1,6 @@
+<table>
+    <tr>
+        <td>Naam:</td>
+<td><?php $gebruikers->login->naam?></td>
+    </tr>
+</table>

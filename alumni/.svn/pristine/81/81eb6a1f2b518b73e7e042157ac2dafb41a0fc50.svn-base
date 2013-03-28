@@ -1,0 +1,34 @@
+
+<?php
+foreach ($gebruiker as $user) {
+    echo '<div>test' . $user->loginId . '</div>';
+}
+?>
+<table>
+    <tr>
+        <td>Naam:</td>
+        <td><?php echo $username; ?></td>
+    </tr>
+    <tr>
+        <td>E-mailadres:</td>
+        <td><?php echo $email; ?></td>      
+    </tr>
+    <tr>
+        <td>Secundaire e-mailadres:</td>
+        <?php foreach ($gebruiker as $user) { ?>
+            <td><?php echo $user->secundairMail; ?></td>
+<?php } ?>
+    </tr>
+    <tr>
+        <td>Werkgever:</td>
+        <?php foreach ($gebruiker as $user) { ?>
+            <td><?php echo $user->werkgever; ?></td>
+<?php } ?>
+    </tr>
+    <tr>
+        <td>Job omschrijving:</td>
+    <?php foreach ($gebruiker as $user) { ?>
+            <td><?php echo $user->jobomschrijving; ?></td>
+        </tr>
+<?php } ?>
+</table>

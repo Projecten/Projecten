@@ -1,0 +1,78 @@
+<script type="text/javascript">
+
+    $(function() {
+        $(".buttons").button();
+
+        $('.datatable').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "Laat _MENU_ records per pagina zien",
+                "sZeroRecords": "Niets gevonden - sorry",
+                "sEmptyTable": "Geen records gevonden in de tabel",
+                "sInfo": "_START_ tot _END_ van _TOTAL_ totale records",
+                "sInfoEmpty": "0 tot 0 van 0 totale records",
+                "sInfoFiltered": "(gefilterd van _MAX_ records)",
+                "sSearch": "Alles zoeken:",
+                "oPaginate": {
+                    "sFirst": " << ",
+                    "sLast": " >> ",
+                    "sNext": " > ",
+                    "sPrevious": " < ",
+                },
+            },
+            "sPaginationType": "full_numbers",
+            "bAutoWidth": false,
+            "aoColumns": [
+                {"sWidth": "15px"},
+                {"sWidth": "150px"},
+                {"sWidth": "150px"},
+                {"sWidth": "150px"}
+            ],
+            //"bJQueryUI": true,
+        }).columnFilter({
+            aoColumns: [
+                null,
+                {type: "text"},
+                {type: "text"},
+                {type: "select"}
+            ]
+        });
+    });
+
+</script>
+
+<h1>Alumni</h1>
+<table class="datatable">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Voornaam</th>
+            <th>Achternaam</th>
+            <th>Afstudeerjaar</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        form_open();
+        foreach ($alumni as $alumnus) {
+            $checkbox = array(
+                'name' => $alumnus->login->emailadres,
+                'id' => $alumnus->login->emailadres,
+            );
+            echo '<tr>';
+            echo '<td>' . form_checkbox($checkbox, '$nbsp') . '</td>';
+            echo '<td>' . $alumnus->login->voornaam . '</td>';
+            echo '<td>' . $alumnus->login->achternaam . '</td>';
+            echo '<td>' . $alumnus->afstudeerjaar . '</td>';
+            echo '</tr>';
+        }
+        ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tfoot>
+</table>

@@ -1,0 +1,131 @@
+<script type="text/javascript">
+$(function() {
+        $( ".startdatumWerk" ).datepicker({ dateFormat: 'dd-mm-yy' });
+    });
+</script>
+
+<?php
+$naam = array(
+    'name' => 'naam',
+    'id' => 'naam',
+    'value' => $login->voornaam . ' ' . $login->achternaam,
+    'disabled' => 'disabled'
+);
+
+$emailadres = array(
+    'name' => 'emailadres',
+    'id' => 'emailadres',
+    'value' => $login->emailadres
+);
+
+$secundairEmail = array(
+    'name' => 'secundairEmailadres',
+    'id' => 'secundairEmailadres',
+    'value' => $login->alumnus->secundairMail
+);
+
+$werkgever = array(
+    'name' => 'werkgever',
+    'id' => 'werkgever',
+    'value' => $login->alumnus->werkgever
+);
+
+$startdatumWerk = array(
+    'name' => 'startdatumWerk',
+    'id' => 'startdatumWerk',
+    'value' => $login->alumnus->startdatumWerk
+);
+
+$jobomschrijving = array(
+    'name' => 'jobomschrijving',
+    'id' => 'jobomschrijving',
+    'value' => $login->alumnus->jobomschrijving
+);
+
+$afstudeerjaar = array(
+    'name' => 'afstudeerjaar',
+    'id' => 'afstudeerjaar',
+    'value' => $login->alumnus->afstudeerjaar,
+    'disabled' => 'disabled'
+);
+
+$school = array(
+    'name' => 'school',
+    'id' => 'school',
+    'value' => $login->alumnus->school->naam
+);
+
+$richting = array(
+    'name' => 'richting',
+    'id' => 'richting',
+    'value' => $login->alumnus->richting->naam
+);
+
+$specialisatie = array(
+    'name' => 'specialisatie',
+    'id' => 'specialisatie',
+    'value' => $login->alumnus->specialisatie->omschrijving,
+    'disabled' => 'disabled'
+);
+?>
+
+<div>
+    <?php
+    $attributes = array('name' => 'myform', 'id' => 'myform');
+    echo form_open('alumnus/updateProfiel', $attributes);
+    echo form_hidden('loginId', $login->id);
+    echo form_hidden('id', $alumnus->id);
+    ?>
+
+    <table>
+        <tr>
+            <td><?php echo form_label('Naam', $naam['id']); ?></td>
+            <td><?php echo form_input($naam); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo form_label('Emailadres:', $emailadres['id']); ?></td>
+            <td colspan="3"><?php echo form_input($emailadres); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo form_label('Secundair emailadres:', $secundairEmail['id']); ?></td>
+            <td colspan="3"><?php echo form_input($secundairEmail); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo form_label('Werkgever:', $werkgever['id']); ?></td>
+            <td><?php echo form_input($werkgever); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo form_label('Startdatum:', $startdatumWerk['id']); ?></td>
+            <td><?php echo form_input($startdatumWerk); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo form_label('Job omschrijving:', $jobomschrijving['id']); ?></td>
+            <td><?php echo form_input($jobomschrijving); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo form_label('afstudeerjaar:', $afstudeerjaar['id']); ?></td>
+            <td><?php echo form_input($afstudeerjaar); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo form_label('school:', $school['id']); ?></td>
+            <td colspan="3"><?php echo form_dropdown($school['name'], $scholen, 0, "id='" . $school['id'] . "'"); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo form_label('richting:', $richting['id']); ?></td>
+            <td colspan="3"><?php echo form_dropdown($richting['name'], $richtingen, 0, "id='" . $richting['id'] . "'"); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo form_label('specialisatie:', $specialisatie['id']); ?></td>
+            <td><?php echo form_input($specialisatie); ?></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><?php echo form_submit('Opslaan', 'Opslaan', 'id="opslaan"', 'class="buttons ui-button ui-widget ui-state-default ui-corner-all"'); ?>
+                <?php echo form_button('annuleer', 'Annuleren', 'id="annuleer"'); ?>
+            </td>
+        </tr>
+    </table>
+
+    <?php echo form_close(); ?>
+</div>
+

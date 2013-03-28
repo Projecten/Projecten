@@ -1,0 +1,222 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class Admin extends CI_Controller {
+
+// +----------------------------------------------------------
+// | Alumni
+// +----------------------------------------------------------
+// | Thomas More - 2TI2 - 2012-2013
+// +----------------------------------------------------------
+// | Admin Controller
+// |
+// +----------------------------------------------------------
+// | Team 28
+// +----------------------------------------------------------
+    //testje voor glenn
+
+    public function __construct() {
+        parent::__construct();
+        //librabries en helpers laden
+        $this->load->library('pagination');
+        $this->load->helper('notation');
+    }
+
+    public function fouteUser() {
+        //indien er een foute user naar de url gaat via adresbalk, deze gegevens tonen
+        $data['title'] = 'Fout - project Alumni';
+//        $data['login_by_username'] = ($this->config->item('login_by_username', 'tank_auth') AND $this->config->item('use_username', 'tank_auth'));
+//        $data['login_by_email'] = $this->config->item('login_by_email', 'tank_auth');
+//        $data['username'] = $this->tank_auth->get_username();
+//        $data['recht'] = $this->tank_auth->get_recht
+        $data['recht'] = $this->session->userdata('recht');
+        $data['username'] = "USERNAME";
+        $data['message'] = 'U bent niet bevoegd om deze pagina te bezoeken.';
+        //template laden met de juiste inhoud
+        $partials = array('header' => 'main_header', 'content' => 'auth/fout_message', 'footer' => 'main_footer', 'menu' => 'main_menu', 'sidebar' => 'main_sidebar', 'login' => 'main_login', 'nieuws' => 'main_nieuws');
+        $this->template->load('main_master', $partials, $data);
+    }
+
+    public function index() {
+        //recht ophalen
+        $recht = $this->session->userdata('recht');
+        //indien recht gelijk is aan administrator
+        if ($recht == 3) {
+            $data['title'] = 'Administrator';
+//            $data['login_by_username'] = ($this->config->item('login_by_username', 'tank_auth') AND $this->config->item('use_username', 'tank_auth'));
+//            $data['login_by_email'] = $this->config->item('login_by_email', 'tank_auth');
+//            $data['recht'] = $this->tank_auth->get_recht();
+//            $data['username'] = $this->tank_auth->get_username();
+            $data['recht'] = $recht;
+            $data['username'] = "USERNAME";
+            //template laden met de juiste inhoud
+            $partials = array('header' => 'main_header', 'content' => 'home_index', 'footer' => 'main_footer', 'menu' => 'main_menu', 'sidebar' => 'main_sidebar', 'login' => 'main_login', 'nieuws' => 'main_nieuws');
+            $this->template->load('main_master', $partials, $data);
+        } else {
+            //verwijzen naar function fouteUser();
+            $this->fouteUser();
+        }
+    }
+
+    //verwijderen van evenementen
+    public function delete() {
+        //recht ophalen
+        $recht = $this->session->userdata('recht');;
+        //id van evenement ophalen
+        $id = $this->input->get('id');
+        //indien recht gelijk is met administrator
+        if ($recht == 3) {
+            $this->load->model('evenement_model');
+            //indien een evenement kan verwijdert worden
+            if ($this->evenement_model->delete($id)) {
+                //bericht: succes
+                $data['message'] = 'Het evenement werd succesvol verwijderd.';
+            } else {
+                //bericht: niet succes
+                $data['message'] = 'Het evenement kan niet verwijderd worden.';
+            }
+            //deze gegevens meegeven
+            $data['title'] = 'Alumni verwijderen - Alumni';
+//            $data['login_by_username'] = ($this->config->item('login_by_username', 'tank_auth') AND $this->config->item('use_username', 'tank_auth'));
+//            $data['login_by_email'] = $this->config->item('login_by_email', 'tank_auth');
+//            $data['username'] = $this->tank_auth->get_username();
+//            $data['recht'] = $this->tank_auth->get_recht();
+            $data['recht'] = $recht;
+            $data['username'] = "USERNAME";
+            $data['vorigePagina'] = 'index.php/alumnus/evenementenBekijken';
+
+            $partials = array('header' => 'main_header', 'content' => 'auth/general_message', 'footer' => 'main_footer', 'menu' => 'main_menu', 'sidebar' => 'main_sidebar', 'login' => 'main_login', 'nieuws' => 'main_nieuws');
+            $this->template->load('main_master', $partials, $data);
+        } else {
+            //verwijzen naar function fouteUser();
+            $this->fouteUser();
+        }
+    }
+
+    public function controleDelete() {
+        //recht ophalen
+        $recht = $this->session->userdata('recht');;
+        //indien recht gelijk is aan administrator
+        if ($recht == 3) {
+            $id = $this->input->get('id');
+
+            $this->load->model('evenement_model');
+            echo $this->evenement_model->delete($id);
+        } else {
+            //verwijzen naar function fouteUser();
+            $this->fouteUser();
+        }
+    }
+
+    //naar pagina evenement toevoegen gaan
+    public function evenementToevoegen() {
+        //recht ophalen
+        $recht = $this->session->userdata('recht');;
+        //indien recht gelijk is aan administrator
+        if ($recht == 3) {
+            $data['title'] = 'Evenement toevoegen - Admin';
+            $data['recht'] = $this->session->userdata('recht');
+            $data['username'] = "USERNAME";
+
+            $this->load->model('plaats_model');
+
+            // locaties in array zetten om door te geven aan de pagina
+            $plaatsen[0] = "--Selecteer een plaats--";
+            foreach ($this->plaats_model->getAll() as $plaats) {
+                $plaatsen[$plaats->id] = $plaats->locatie;
+            }
+            $data['plaatsen'] = $plaatsen;
+
+            //nieuw evenement object aanmaken
+            $this->load->model('evenement_model');
+            $data['evenement'] = $this->evenement_model->newObject();
+
+            //om te kiezen tussen evenement toevoegen of bewerken
+            $data['actie'] = 'Toevoegen';
+
+            $partials = array('header' => 'main_header', 'content' => 'admin/evenementToevoegen', 'footer' => 'main_footer', 'menu' => 'main_menu', 'sidebar' => 'main_sidebar', 'login' => 'main_login', 'nieuws' => 'main_nieuws');
+            $this->template->load('main_master', $partials, $data);
+        } else {
+            //verwijzen naar function fouteUser();
+            $this->fouteUser();
+        }
+    }
+
+    //naar pagina evenement toevoegen gaan
+    public function evenementAanpassen($id) {
+        //recht ophalen
+        $recht = $this->session->userdata('recht');;
+        //indien recht gelijk is aan administrator
+        if ($recht != 1) {
+            $data['title'] = 'Evenement aanpassen - Admin';
+            $data['recht'] = $this->session->userdata('recht');
+            $data['username'] = "USERNAME";
+
+
+            $this->load->model('plaats_model');
+
+            // locaties in array zetten om door te geven aan de pagina
+            foreach ($this->plaats_model->getAll() as $plaats) {
+                $plaatsen[$plaats->id] = $plaats->locatie;
+            }
+            $data['plaatsen'] = $plaatsen;
+
+            //nieuw evenement object aanmaken
+            $this->load->model('evenement_model');
+            $data['evenement'] = $this->evenement_model->get($id);
+
+            //om te kiezen tussen evenement toevoegen of bewerken
+            $data['actie'] = 'Bewerken';
+
+            $partials = array('header' => 'main_header', 'content' => 'admin/evenementAanpassen', 'footer' => 'main_footer', 'menu' => 'main_menu', 'sidebar' => 'main_sidebar', 'login' => 'main_login', 'nieuws' => 'main_nieuws');
+            $this->template->load('main_master', $partials, $data);
+        } else {
+            //verwijzen naar function fouteUser();
+            $this->fouteUser();
+        }
+    }
+
+    //bewerken van evenement
+    public function update() {
+        //recht ophalen
+        $recht = $this->session->userdata('recht');;
+        //indien recht gelijk is aan administrator
+        if ($recht != 1) {
+            //gegevens ophalen
+            $evenement->id = $this->input->post('id');
+            $evenement->naam = $this->input->post('naam');
+            $evenement->omschrijving = $this->input->post('omschrijving');
+            $evenement->plaatsId = $this->input->post('plaats');
+            $evenement->datum = toYYYYMMDD($this->input->post('datum')) . ' ' . str_replace("u", ":", $this->input->post('startuur')) . ':00';
+            $evenement->deadlineInschrijving = toYYYYMMDD($this->input->post('deadlineInschrijving'));
+
+            $this->load->model('evenement_model');
+            //indien er een evenement id niet besta
+            if ($evenement->id == 0) {
+                //invoegen van een evenement
+                $this->evenement_model->insert($evenement);
+            } else {
+                //bewerken van een evenement
+                $this->evenement_model->update($evenement);
+            }
+
+            //Terug naar overzicht
+            $data['title'] = 'Evenementen bekijken - Alumni';
+            $data['username'] = "USERNAME";
+
+
+            redirect('alumnus/evenementenBekijken');
+        } else {
+            //verwijzen naar function fouteUser();
+            $this->fouteUser();
+        }
+    }
+
+}
+
+/* End of file home.php */
+    /* Location: ./application/controllers/home.php */
+
+

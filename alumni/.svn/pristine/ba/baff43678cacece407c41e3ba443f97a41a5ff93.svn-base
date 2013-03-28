@@ -1,0 +1,33 @@
+<?php
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+?>
+
+<script type="text/javascript">
+
+    $(function() {
+        $(".buttons").button();
+    });
+
+</script>
+<?php
+if (!$recht) {
+    ?>
+    <td><?php echo anchor('/home/login', 'Aanmelden'); ?></td>
+    <?php
+} else {
+    ?>
+    <table>
+        <tr>
+            <td>Ingelogd als <b><?php echo $username; ?></b></td>
+            <td></td>
+            <td> <?php echo anchor('/alumnus/bewerkProfiel', 'Profiel'); ?> </td>
+            <td> | </td>
+            <td><?php echo anchor('/user/afmelden', 'Afmelden'); ?></td>
+        </tr>
+    </table>
+    <?php
+}
+?>

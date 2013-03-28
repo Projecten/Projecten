@@ -1,0 +1,131 @@
+<?php
+
+class Alumnus_model extends CI_Model {
+
+    // +----------------------------------------------------------
+    // | Alumni - Alumnus_Model
+    // +----------------------------------------------------------
+    // | KHK - 2 TI - 2012-2013
+    // +----------------------------------------------------------
+    // | Alumnus Model
+    // |
+    // +----------------------------------------------------------
+    // | Glenn Van Rymenant
+    // | Sander Vanelven
+    // | Yoeri Stessens
+    // | Giel Reijns
+    // +----------------------------------------------------------
+
+    function __construct()
+    {
+        parent::__construct();
+    }
+
+     function get($id)
+    {
+        $this->db->where('id', $id);
+        $query = $this->db->get('alumnus');
+        return $query->row();
+    }
+
+    function getAll()
+    {
+        $this->db->order_by('naam', 'asc');
+        $query = $this->db->get('alumnus');
+        return $query->result();
+    }
+    
+    function insertAlumnus($alumnus) {
+        $this->db->insert('alumnus', $alumnus);
+        return $this->db->insert_id();
+    }
+     function updateProfiel($alumnus) {
+        $this->db->where('id', $alumnus->id);
+        $this->db->update('alumnus', $alumnus);
+    }
+    
+    function getJoinLogin() {
+        $id = $gebruikers->id;
+        $this->db->where('id', $id);
+        $query = $this->db->get('alumnus');
+        $gebruikers = $query->result();
+        
+        $this->load->model('user_model');
+        
+        foreach ($gebruikers as $gebruiker) {
+            $gebruiker->login = $this->user_model->get($gebruiker->loginId);
+        }
+        
+        return $gebruikers;
+        
+    }
+    
+    
+    function getAfstudeerjaren() {
+        $this->db->distinct();
+        $this->db->select('afstudeerjaar');
+        $this->db->order_by('afstudeerjaar', 'asc');
+        $query = $this->db->get('alumnus');
+        return $query->result();
+    }
+    
+    function getAllPaginationByVoornaamAchternaamAfstudeerjaar($info, $aantal, $startRow) {
+        
+        //nakijken of deze velden wel ingevuld zijn
+        /*if ($info['naam'] != "") {
+            $this->db->like('naam', $info['naam']);
+        }
+        if ($info['omschrijving'] != "") {
+            $this->db->like('omschrijving', $info['omschrijving']);
+        }
+        if ($info['plaatsId'] != 0) {
+            $this->db->where('plaatsId', $info['plaatsId']);
+        }
+        if ($info['datum1'] != "") {
+            $datum = date('Y-m-d', strtotime(str_replace('/','-',$info['datum1'])));
+            $this->db->where('datum >=', $datum);
+        }
+        if ($info['datum2'] != "") {
+            $datum = date('Y-m-d', strtotime(str_replace('/','-',$info['datum2'])));
+            $this->db->where('datum <=', $datum);
+        }*/
+        $this->db->order_by('voornaam');
+        $this->db->limit($aantal, $startRow);
+        $query = $this->db->get('alumnus');
+        $alumni = $query->result();
+
+        $this->load->model("user_model");
+        foreach ($alumni as $alumnus) {
+            $alumnus->user = $this->user_model->get($alumnus->userId);
+        }
+        return $query->result();
+    }
+    
+     function getCountByVoornaamAchternaamAfstudeerjaar($info) {
+        
+        //nakijken of deze velden wel ingevuld zijn
+        /*if ($info['naam'] != "") {
+            $this->db->like('naam', $info['naam']);
+        }
+        if ($info['omschrijving'] != "") {
+            $this->db->like('omschrijving', $info['omschrijving']);
+        }
+        if ($info['plaatsId'] != 0) {
+            $this->db->where('plaatsId', $info['plaatsId']);
+        }
+        if ($info['datum1'] != "") {
+            $datum = date('Y-m-d', strtotime(str_replace('/','-',$info['datum1'])));
+            $this->db->where('datum >=', $datum);
+        }
+        if ($info['datum2'] != "") {
+            $datum = date('Y-m-d', strtotime(str_replace('/','-',$info['datum2'])));
+            $this->db->where('datum <=', $datum);
+        }*/
+        
+        
+        $query = $this->db->get('alumnus');
+        return $query->num_rows();
+    }
+}
+
+?>

@@ -1,0 +1,38 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class Alumni extends CI_Controller {
+
+    // +----------------------------------------------------------
+    // | Beershop
+    // +----------------------------------------------------------
+    // | KHK - 2 TI - 201x-201x
+    // +----------------------------------------------------------
+    // | Default controller
+    // |
+    // +----------------------------------------------------------
+    // | K. Vangeel
+    // +----------------------------------------------------------
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+    public function index() {
+        $data['title'] = 'Alumni';
+//        $data['login_by_username'] = ($this->config->item('login_by_username', 'tank_auth') AND $this->config->item('use_username', 'tank_auth'));
+//        $data['login_by_email'] = $this->config->item('login_by_email', 'tank_auth');
+//        $data['username']	= $this->tank_auth->get_username();
+        $data['recht'] = 3;
+        $data['username'] = "USERNAME";
+
+        $partials = array('header' => 'main_header', 'content' => 'alumnus/al_home', 'footer' => 'main_footer', 'menu' => 'main_menu', 'sidebar' => 'main_sidebar', 'login' => 'main_login', 'nieuws' => 'main_nieuws');
+        $this->template->load('main_master', $partials, $data);
+    }
+
+}
+
+/* End of file home.php */
+/* Location: ./application/controllers/home.php */

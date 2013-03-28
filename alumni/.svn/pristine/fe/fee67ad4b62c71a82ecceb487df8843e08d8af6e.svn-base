@@ -1,0 +1,55 @@
+<table cellpadding="10">
+    <tr>
+        <td>Naam:</td>
+        <td><?php echo $login->voornaam . ' ' . $login->achternaam; ?></td>
+    </tr>
+    <tr>
+        <td>E-mailadres:</td>
+        <td><?php echo $login->emailadres; ?></td>      
+    </tr>
+    <?php 
+    if ($recht == 1) {
+    echo "<tr>";
+        echo "<td>Secundaire e-mailadres:</td>";
+        echo "<td>". $login->alumnus->secundairMail . "</td>";
+    echo "</tr>";
+    echo "<tr>";
+        echo "<td>Werkgever:</td>";
+        echo "<td>" . $login->alumnus->werkgever . "</td>";
+    echo "</tr>";
+    echo "<tr>";
+        echo "<td>Startdatum:</td>";
+        echo "<td>" . $login->alumnus->startdatumWerk . "</td>";
+    echo "</tr>";
+    echo "<tr>";
+        echo "<td>Job omschrijving:</td>";
+        echo "<td>" . $login->alumnus->jobomschrijving . "</td>";
+    echo "</tr>";
+    echo "<tr>";
+        echo "<td>Afstudeerjaar:</td>";
+        echo "<td>" . $login->alumnus->afstudeerjaar . "</td>";
+    echo "</tr>";
+    echo "<tr>";
+        echo "<td>school:</td>";
+        echo "<td>" . $login->alumnus->school->naam . "</td>";
+    echo "</tr>";
+    echo "<tr>";
+        echo "<td>richting:</td>";
+        echo "<td>" . $login->alumnus->richting->naam . "</td>";
+    echo "</tr>";
+    echo "<tr>";
+        echo "<td>specialisatie:</td>";
+        echo "<td>" . $login->alumnus->specialisatie->omschrijving . "</td>";
+    echo "</tr>";
+    }
+    ?>   
+</table>
+<?php
+$attributes = array('name' => 'myform', 'id' => 'myform');
+echo form_open('alumnus/bewerkProfiel', $attributes);
+
+echo form_submit('Bewerk profiel', 'Bewerk profiel' ,'id=bewerk');
+
+echo form_close(); 
+?>
+

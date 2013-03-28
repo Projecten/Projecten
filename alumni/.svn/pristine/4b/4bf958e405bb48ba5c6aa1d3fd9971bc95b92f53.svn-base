@@ -1,0 +1,21 @@
+<?php
+$attributes = array('name' => 'myform');
+echo form_open('home/aanmelden', $attributes);
+?>
+<table>
+    <tr>
+        <td><?php echo form_label('Emailadres:', 'email');?></td>
+        <td><?php echo form_input(array('name' => 'email', 'id' => 'email', 'size' => '50'));?></td>
+    </tr>
+    <tr>
+        <td><?php echo form_label('Wachtwoord:', 'password');?></td>
+        <td><?php $data = array('name' => 'password', 'id' => 'password', 'size' => '50');
+            echo form_password($data);?></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><?php echo form_submit('mysubmit', 'Aanmelden');?></td>
+    </tr>
+</table>
+
+<?php echo form_close();?>

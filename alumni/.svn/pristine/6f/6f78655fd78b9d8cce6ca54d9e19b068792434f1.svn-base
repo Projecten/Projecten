@@ -1,0 +1,7 @@
+<p>
+<?php
+foreach ($ids as $id) {
+    echo $id + '  ';
+}
+?>
+</p>

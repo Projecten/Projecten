@@ -1,0 +1,36 @@
+<?php/*
+
+class Soort_mail_model extends CI_Model {
+
+    // +----------------------------------------------------------
+    // | Beershop - bestelling_model.php
+    // +----------------------------------------------------------
+    // | KHK - 2 TI - 201x-201x
+    // +----------------------------------------------------------
+    // | Bestellijn model
+    // |
+    // +----------------------------------------------------------
+    // | K. Vangeel
+    // +----------------------------------------------------------
+
+    function __construct()
+    {
+        parent::__construct();
+    }
+
+     function get($id)
+    {
+        $this->db->where('soortId', $id);
+        $query = $this->db->get('soort_mail');
+        return $query->row();
+    }
+
+    function getAll()
+    {
+        $this->db->order_by('naam', 'asc');
+        $query = $this->db->get('soort_mail');
+        return $query->result();
+    }
+}
+*/
+?>

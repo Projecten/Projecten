@@ -1,0 +1,258 @@
+<?php
+
+class User extends CI_Controller {
+
+    public function __construct() {
+        parent::__construct();
+//laden van libraries en helpers
+        $this->load->library('pagination');
+        $this->load->helper('notation');
+        $this->load->helper('cookie');
+        $this->load->library('session');
+    }
+
+    public function aanmelden() {
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+
+        if ($this->authex->login($email, $password)) {
+            redirect('home/index');
+        }
+    }
+
+    public function afmelden() {
+        $this->authex->logout();
+        redirect('home/index');
+    }
+
+    public function fouteUser() {
+//indien er een foute user naar de url gaat via adresbalk, deze gegevens tonen
+        $data['title'] = 'Aanmelden - project Alumni';
+        $data['recht'] = $this->session->userdata('recht');
+        $data['username'] = $this->session->userdata('username');
+        $data['message'] = 'U bent niet bevoegd om deze pagina te bezoeken.';
+
+        $partials = array('header' => 'main_header', 'content' => 'auth/fout_message', 'footer' => 'main_footer', 'menu' => 'main_menu', 'sidebar' => 'main_sidebar', 'login' => 'main_login', 'nieuws' => 'main_nieuws');
+        $this->template->load('main_master', $partials, $data);
+    }
+
+//evenementen zoeken
+    public function evenementenZoeken($startRow = 0) {
+//recht ophalen
+        $recht = 3;
+//indien er een recht is opgehaald
+        if (isset($recht)) {
+            $data['title'] = 'Evenementen zoeken - Alumni project';
+            $data['recht'] = $this->session->userdata('recht');
+             $data['username'] = $this->session->userdata('username');
+            $data['vorigePagina'] = 'index.php/user/evenementenZoeken';
+
+
+//paging
+            $this->load->model('evenement_model');
+            if ((get_cookie('pagination')) == NULL) {
+                $aantal = get_cookie('pagination');
+            } else {
+                $aantal = 10;
+            }
+            $config['base_url'] = site_url('user/evenementenZoeken');
+            $config['total_rows'] = $this->evenement_model->getCount();
+            $config['per_page'] = $aantal;
+            $config['first_link'] = "&lt;&lt; Eerste";
+            $config['last_link'] = "Laatste &gt;&gt;";
+            $config['num_links'] = 10;
+            $this->pagination->initialize($config);
+            $data['evenementen'] = $this->evenement_model->getAllPagination($aantal, $startRow);
+            $data['links'] = $this->pagination->create_links();
+
+            $info['geavanceerdZoeken'] = 0;
+            $info['naam'] = '';
+            $info['plaatsId'] = '';
+            $info['datum1'] = '';
+            $info['datum2'] = '';
+            $info['omschrijving'] = '';
+            $this->session->set_userdata('zoekinfoEvenementen', $info);
+
+            $partials = array('header' => 'main_header', 'content' => 'user/evenementenzoeken', 'footer' => 'main_footer', 'menu' => 'main_menu', 'sidebar' => 'main_sidebar', 'login' => 'main_login', 'nieuws' => 'main_nieuws');
+            $this->template->load('main_master', $partials, $data);
+        } else {
+//verwijzen naar function fouteUser()
+            $this->fouteUser();
+        }
+    }
+
+//evenementen zoeken
+    public function evenementenZoekactie() {
+//recht ophalen
+        $recht = $this->session->userdata('recht');
+//indien er een recht is opgehaald
+        if (isset($recht)) {
+            $data['recht'] = $recht;
+
+            $this->load->model('evenement_model');
+
+            $info['geavanceerdZoeken'] = (!$this->input->get('pagination')) ? 0 : 1;
+            $info['naam'] = $this->input->get('naam');
+            $info['plaatsId'] = $this->input->get('plaats');
+            $info['datum1'] = $this->input->get('begindatum');
+            $info['datum2'] = $this->input->get('einddatum');
+            $info['omschrijving'] = $this->input->get('omschrijving');
+
+//paging
+            if (($this->input->get('pagination')) != NULL) {
+                $aantal = $this->input->get('pagination');
+                set_cookie(array('name' => 'pagination', 'value' => $aantal));
+            } elseif ((get_cookie('pagination')) == NULL) {
+                $aantal = 10;
+                set_cookie(array('name' => 'pagination', 'value' => $aantal));
+            } else {
+                $aantal = get_cookie('pagination');
+            }
+            $info['pagination'] = $aantal;
+            $config['base_url'] = site_url('alumnus/evenementenBekijkenZoeken');
+            $config['total_rows'] = $this->evenement_model->getCountByNaamPlaatsDatum($info);
+            $config['per_page'] = $aantal;
+            $config['first_link'] = "&lt;&lt; Eerste";
+            $config['last_link'] = "Laatste &gt;&gt;";
+            $config['num_links'] = 10;
+            $this->pagination->initialize($config);
+
+
+            $data['evenementen'] = $this->evenement_model->getAllPaginationByNaamPlaatsDatum($info, $aantal, 0);
+            $data['links'] = $this->pagination->create_links();
+            $data['recht'] = $recht;
+            $data['info'] = $info;
+
+            $this->session->set_userdata('zoekinfoEvenementen', $info);
+
+
+            $this->load->view('user/evenementenzoeken_ajax', $data);
+        } else {
+//verwijzen naar function fouteUser()
+            $this->fouteUser();
+        }
+    }
+
+    public function evenementenGeavanceerdZoeken() {
+        $recht = $this->session->userdata('recht');
+        if (isset($recht)) {
+            $data['recht'] = $recht;
+
+// locaties in array zetten om door te geven aan de pagina
+            $this->load->model('plaats_model');
+            $plaatsen[0] = "-- Alle plaatsen --";
+            foreach ($this->plaats_model->getAll() as $plaats) {
+                $plaatsen[$plaats->id] = $plaats->locatie;
+            }
+            $data['plaatsen'] = $plaatsen;
+            $data['zoekinfoEvenementen'] = $this->session->userdata('zoekinfoEvenementen');
+
+            $this->load->view('user/evenementenGeavanceerdZoeken_ajax', $data);
+        } else {
+//verwijzen naar function fouteUser()
+            $this->fouteUser();
+        }
+    }
+
+//alumnus opzoeken
+//werkt momenteel nog niet
+    public function alumniZoeken() {
+        $data['title'] = 'Alumnus zoeken - Alumni project';
+//        $data['username'] = $this->tank_auth->get_username();
+//        $data['recht'] = $this->tank_auth->get_recht();
+        $data['recht'] = $this->session->userdata('recht');
+        $data['username'] = $this->session->userdata('username');
+
+// locaties in array zetten om door te geven aan de pagina
+        $this->load->model('alumnus_model');
+        $afstudeerjaren[0] = "-- Alle jaren --";
+        foreach ($this->alumnus_model->getAfstudeerjaren() as $afstudeerjaar) {
+            $afstudeerjaren[$afstudeerjaar->afstudeerjaar] = $afstudeerjaar->afstudeerjaar;
+        }
+        $data['afstudeerjaren'] = $afstudeerjaren;
+
+        if (($this->input->get('pagination')) != NULL) {
+            $aantal = $this->input->get('pagination');
+            set_cookie(array('name' => 'pagination', 'value' => $aantal));
+        } elseif ((get_cookie('pagination')) == NULL) {
+            $aantal = 10;
+            set_cookie(array('name' => 'pagination', 'value' => $aantal));
+        } else {
+            $aantal = get_cookie('pagination');
+        }
+        $info['pagination'] = $aantal;
+        $config['base_url'] = site_url('user/alumniZoekactie'); /* nog aanpassen */
+        $config['total_rows'] = $this->alumnus_model->getCountByVoornaamAchternaamAfstudeerjaar($info);
+        $config['per_page'] = $aantal;
+        $config['first_link'] = "&lt;&lt; Eerste";
+        $config['last_link'] = "Laatste &gt;&gt;";
+        $config['num_links'] = 10;
+        $this->pagination->initialize($config);
+
+
+        $data['alumni'] = $this->alumnus_model->getCountByVoornaamAchternaamAfstudeerjaar($info, $aantal, 0);
+        $data['links'] = $this->pagination->create_links();
+        $data['info'] = $info;
+
+        $this->session->set_userdata('zoekinfoAlumni', $info);
+
+        $partials = array('header' => 'main_header', 'content' => 'user/alumnizoeken', 'footer' => 'main_footer', 'menu' => 'main_menu', 'sidebar' => 'main_sidebar', 'login' => 'main_login', 'nieuws' => 'main_nieuws');
+        $this->template->load('main_master', $partials, $data);
+    }
+
+    public function alumniZoekactie($startRow = 0) {
+//recht ophalen
+//        $recht = $this->tank_auth->get_recht();
+        $data['recht'] = $this->session->userdata('recht');
+        $data['username'] = $this->session->userdata('username');
+//indien er een recht is opgehaald
+        if (isset($recht)) {
+            $data['recht'] = $this->session->userdata('recht');
+
+            $this->load->model('alumnus_model');
+
+            $info['geavanceerdZoeken'] = (!$this->input->get('pagination')) ? 0 : 1;
+            $info['naam'] = $this->input->get('naam');
+            $info['plaatsId'] = $this->input->get('plaats');
+            $info['datum1'] = $this->input->get('begindatum');
+            $info['datum2'] = $this->input->get('einddatum');
+            $info['omschrijving'] = $this->input->get('omschrijving');
+
+//paging
+            if (($this->input->get('pagination')) != NULL) {
+                $aantal = $this->input->get('pagination');
+                set_cookie(array('name' => 'pagination', 'value' => $aantal));
+            } elseif ((get_cookie('pagination')) == NULL) {
+                $aantal = 10;
+                set_cookie(array('name' => 'pagination', 'value' => $aantal));
+            } else {
+                $aantal = get_cookie('pagination');
+            }
+            $info['pagination'] = $aantal;
+            $config['base_url'] = site_url('user/alumniZoekactie'); /* nog aanpassen */
+            $config['total_rows'] = $this->alumnus_model->getCountByVoornaamAchternaamAfstudeerjaar($info);
+            $config['per_page'] = $aantal;
+            $config['first_link'] = "&lt;&lt; Eerste";
+            $config['last_link'] = "Laatste &gt;&gt;";
+            $config['num_links'] = 10;
+            $this->pagination->initialize($config);
+
+
+            $data['alumni'] = $this->alumnus_model->getCountByVoornaamAchternaamAfstudeerjaar($info, $aantal, $startRow);
+            $data['links'] = $this->pagination->create_links();
+            $data['recht'] = $recht;
+            $data['info'] = $info;
+
+            $this->session->set_userdata('zoekinfoAlumni', $info);
+
+
+            $this->load->view('user/alumnizoeken_ajax', $data);
+        } else {
+//verwijzen naar function fouteUser()
+            $this->fouteUser();
+        }
+    }
+
+}
+
+?>

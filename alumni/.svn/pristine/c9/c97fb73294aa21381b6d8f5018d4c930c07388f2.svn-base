@@ -1,0 +1,53 @@
+<?php
+
+class Alumnus_model extends CI_Model {
+
+    // +----------------------------------------------------------
+    // | Beershop - bestelling_model.php
+    // +----------------------------------------------------------
+    // | KHK - 2 TI - 201x-201x
+    // +----------------------------------------------------------
+    // | Bestellijn model
+    // |
+    // +----------------------------------------------------------
+    // | K. Vangeel
+    // +----------------------------------------------------------
+
+    function __construct()
+    {
+        parent::__construct();
+    }
+
+     function get($id)
+    {
+        $this->db->where('id', $id);
+        $query = $this->db->get('alumnus');
+        return $query->row();
+    }
+
+    function getAll()
+    {
+        $this->db->order_by('naam', 'asc');
+        $query = $this->db->get('alumnus');
+        return $query->result();
+    }
+    
+    function insertAlumnus($alumnus) {
+        $this->db->insert('alumnus', $alumnus);
+        return $this->db->insert_id();
+    }
+     function updateProfiel($alumnus) {
+        $this->db->where('id', $alumnus->id);
+        $this->db->update('alumnus', $alumnus);
+    }
+    
+    function getAfstudeerjaren() {
+        $this->db->distinct();
+        $this->db->select('afstudeerjaar');
+        $this->db->order_by('afstudeerjaar', 'asc');
+        $query = $this->db->get('alumnus');
+        return $query->result();
+    }
+}
+
+?>
