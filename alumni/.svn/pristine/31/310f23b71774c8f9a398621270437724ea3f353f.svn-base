@@ -1,6 +1,0 @@
-<table>
-    <tr>
-        <td>Naam:</td>
-<td><?php echo $username; ?></td>
-    </tr>
-</table>

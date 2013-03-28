@@ -1,6 +1,0 @@
-<table>
-    <tr>
-        <td>Naam:</td>
-<td><?php echo $gebruikers->login->naam; ?></td>
-    </tr>
-</table>
